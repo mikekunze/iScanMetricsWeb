@@ -3,4 +3,32 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src='/socket.io/socket.io.js', type='application/javascript')
+    script(src='/extjs/ext.js',     type='application/javascript')
+
+    script
+      var socket = new io.connect('http://144.92.52.185');
+      Ext.namespace('Ext.app.viewport');
+
+      Ext.define('beadChip', {
+        extend: 'Ext.data.Model',
+        fields: [
+          { name: 'beadChip', type: 'string' }
+          { name: 'date'    , type: 'string' },
+          { name: 'section' , type: 'string' },
+          { name: 'focusGrn', type: 'number' },
+          { name: 'regGrn',   type: 'number' },
+          { name: 'p05Grn',   type: 'number' },
+          { name: 'p95Grrn',  type: 'number' },
+          { name: 'focusRed', type: 'number' },
+          { name: 'regRed',   type: 'number' },
+          { name: 'p05Red',   type: 'number' },
+          { name: 'p95Red',   type: 'number' }
+        ],
+        idProperty: 'results'
+      });
+      
+      Ext.require('Ext.grid.*');
+
+
   body!= body
