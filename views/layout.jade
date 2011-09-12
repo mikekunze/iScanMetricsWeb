@@ -3,6 +3,7 @@ html
   head
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/extjs/resources/css/ext-all-gray.css')
     script(src='/socket.io/socket.io.js', type='application/javascript')
     script(src='/extjs/ext.js',     type='application/javascript')
 
@@ -10,10 +11,10 @@ html
       var socket = new io.connect('http://144.92.52.185');
       Ext.namespace('Ext.app.viewport');
 
-      Ext.define('beadChip', {
+      Ext.define('section', {
         extend: 'Ext.data.Model',
         fields: [
-          { name: 'beadChip', type: 'string' }
+          { name: 'beadChip', type: 'string' },
           { name: 'date'    , type: 'string' },
           { name: 'section' , type: 'string' },
           { name: 'focusGrn', type: 'number' },
@@ -27,8 +28,83 @@ html
         ],
         idProperty: 'results'
       });
+
+      Ext.define('beadchip', {
+        extend: 'Ext.data.Model',
+        fields: [
+          { name: 'date',     type: 'string' },
+          { name: 'beadChip', type: 'string' },
+          { name: 'sections', type: 'number' },
+          { name: 'pass',     type: 'number' },
+          { name: 'fail',     type: 'number' }
+        ],
+        idProperty: 'results'
+      });
       
       Ext.require('Ext.grid.*');
 
 
+      Ext.application({
+        name: 'iScanWeb',
+        launch: function () {
+          var beadchipStore = Ext.create('Ext.data.Store', {
+            storeId: 'beadchips',
+            model:   'beadchip',
+            proxy: {
+              api: {
+                read: 'beadchips.read'
+              },
+              type: 'ajax',
+              reader: {
+                type: 'json',
+                root: 'items'
+              },
+              writer: { type: 'json' }
+            }
+          }).load();
+
+          var beadchipGrid = Ext.create('Ext.grid.GridPanel', {
+            id: 'Ext.app.viewport.beadchipGrid',
+            autoScroll: true,
+            store: Ext.data.StoreManager.lookup('beadchips'),
+            columns: [
+              {
+                header: 'beadChip',
+                dataIndex: 'beadChip',
+                width: 135,
+              },
+              {
+                header: 'date',
+                dataIndex: 'date',
+                width: 200
+              },
+              {
+                header: 'fail',
+                dataIndex: 'fail',
+                width: 50
+              },
+              {
+                header: 'pass',
+                dataIndex: 'pass',
+                width: 50
+              },
+              {
+                header: 'sections',
+                dataIndex: 'sections',
+                width: 50
+              }
+            ]
+          });
+
+          Ext.create('Ext.window.Window', {
+            title: 'BeadChips', 
+            height: 600,
+            width: 500,
+            layout: 'fit',
+            items: [ beadchipGrid ]
+          }).show();
+
+        }
+      });
+  
   body!= body

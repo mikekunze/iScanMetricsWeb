@@ -86,5 +86,33 @@ app.get('/', function(req, res){
   });
 });
 
+app.get('/beadchips.read', function(req, res) {
+
+  var docs = [];
+ 
+  var eachDoc = function(item, callback) {
+    doc = {
+      date:     item.sections[0].date, 
+      beadChip: item.sections[0].beadChip,
+      sections: item.sections.length,
+      pass:     0,
+      fail:     0
+    };
+
+    docs.push(doc);
+    callback();
+  };
+  
+  async.forEach(beadChips, eachDoc, function() {
+    var results = {
+      success: true,
+      results: docs.length,
+      items: docs
+    };
+
+    res.send(results);
+  });
+});
+
 app.listen(80);
 console.log("extstack server listening on port %d in %s mode", app.address().port, app.settings.env);
