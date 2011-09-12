@@ -18,7 +18,22 @@ beadChip.prototype.buildBeadChip = function(rows, sections) {
     } 
 
     if(sectionArray[0] != "Date") {
-      sections.push(sectionArray);
+      
+      sectionObject = {
+        date:     sectionArray[0],
+        beadChip: sectionArray[1],
+        section:  sectionArray[2],
+        focusGrn: Number(sectionArray[3]),
+        regGrn:   Number(sectionArray[4]),
+        p05Grn:   Number(sectionArray[5]),
+        p95Grn:   Number(sectionArray[6]),
+        focusRed: Number(sectionArray[7]),
+        regRed:   Number(sectionArray[8]),
+        p05Red:   Number(sectionArray[9]), 
+        p95Red:   Number(sectionArray[10])
+      };
+
+      sections.push(sectionObject);
       callback();
     }
 
