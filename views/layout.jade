@@ -2,7 +2,6 @@
 html
   head
     title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/extjs/resources/css/ext-all-gray.css')
     script(src='/socket.io/socket.io.js', type='application/javascript')
     script(src='/extjs/ext.js',     type='application/javascript')
@@ -94,6 +93,142 @@ html
                 width: 50
               }
             ]
+          });
+
+          sectionsStore = Ext.create('Ext.data.Store', {
+            storeId: 'sections',
+            model:   'section',
+            proxy: {
+              api: {
+                read: 'sections.read'
+              },
+              type: 'ajax',
+              reader: {
+                type: 'json',
+                root: 'items'
+              },
+              writer: { type: 'json' }
+            }
+          });
+
+          failedSectionsStore = Ext.create('Ext.data.Store', {
+            storeId: 'failedSections',
+            model:   'section',
+            proxy: {
+              api: {
+                read: 'failedSections.read'
+              },
+              type: 'ajax',
+              reader: {
+                type: 'json',
+                root: 'items'
+              },
+              writer: { type: 'json' }
+            }
+          });
+
+          passedSectionsStore = Ext.create('Ext.data.Store', {
+            storeId: 'passedSections',
+            model:   'section',
+            proxy: {
+              api: {
+                read: 'passedSections.read'
+              },
+              type: 'ajax',
+              reader: {
+                type: 'json',
+                root: 'items'
+              },
+              writer: { type: 'json' }
+            }
+          });
+
+          beadchipGrid.on('itemdblclick', function(view, model) {
+
+            // Sections GRID
+            var sectionsGrid = Ext.create('Ext.grid.GridPanel', {
+              title: 'Sections for ' + model.get('beadChip'),
+              autoScroll: true,
+              store: Ext.data.StoreManager.lookup('sections'),
+              columns: [
+                { header: 'beadChip', dataIndex: 'beadChip', width: 135 },
+                { header: 'date'    , dataIndex: 'date',     width: 175 },
+                { header: 'section' , dataIndex: 'section',  width: 135 },
+                { header: 'focusGrn', dataIndex: 'focusGrn', width: 80 },
+                { header: 'regGrn',   dataIndex: 'regGrn',   width: 80 },
+                { header: 'p05Grn',   dataIndex: 'p05Grn',   width: 80 },
+                { header: 'p95Grn',   dataIndex: 'p95Grn',   width: 80 },
+                { header: 'focusRed', dataIndex: 'focusRed', width: 80 },
+                { header: 'regRed',   dataIndex: 'regRed',   width: 80 },
+                { header: 'p05Red',   dataIndex: 'p05Red',   width: 80 },
+                { header: 'p95Red',   dataIndex: 'p95Red',   width: 80 }
+              ]
+            });
+
+            // failedSections GRID
+            var failedSectionsGrid = Ext.create('Ext.grid.GridPanel', {
+              title: 'Failed sections for ' + model.get('beadChip'),
+              autoScroll: true,
+              store: Ext.data.StoreManager.lookup('failedSections'),
+              columns: [
+                { header: 'beadChip', dataIndex: 'beadChip', width: 135 },
+                { header: 'date'    , dataIndex: 'date',     width: 175 },
+                { header: 'section' , dataIndex: 'section',  width: 135 },
+                { header: 'focusGrn', dataIndex: 'focusGrn', width: 80 },
+                { header: 'regGrn',   dataIndex: 'regGrn',   width: 80 },
+                { header: 'p05Grn',   dataIndex: 'p05Grn',   width: 80 },
+                { header: 'p95Grn',   dataIndex: 'p95Grn',   width: 80 },
+                { header: 'focusRed', dataIndex: 'focusRed', width: 80 },
+                { header: 'regRed',   dataIndex: 'regRed',   width: 80 },
+                { header: 'p05Red',   dataIndex: 'p05Red',   width: 80 },
+                { header: 'p95Red',   dataIndex: 'p95Red',   width: 80 }
+              ]
+            });
+
+            // passedSections GRID
+            var passedSectionsGrid = Ext.create('Ext.grid.GridPanel', {
+              title: 'Passed sections for ' + model.get('beadChip'),
+              autoScroll: true,
+              store: Ext.data.StoreManager.lookup('passedSections'),
+              columns: [
+                { header: 'beadChip', dataIndex: 'beadChip', width: 135 },
+                { header: 'date'    , dataIndex: 'date',     width: 175 },
+                { header: 'section' , dataIndex: 'section',  width: 135 },
+                { header: 'focusGrn', dataIndex: 'focusGrn', width: 80 },
+                { header: 'regGrn',   dataIndex: 'regGrn',   width: 80 },
+                { header: 'p05Grn',   dataIndex: 'p05Grn',   width: 80 },
+                { header: 'p95Grn',   dataIndex: 'p95Grn',   width: 80 },
+                { header: 'focusRed', dataIndex: 'focusRed', width: 80 },
+                { header: 'regRed',   dataIndex: 'regRed',   width: 80 },
+                { header: 'p05Red',   dataIndex: 'p05Red',   width: 80 },
+                { header: 'p95Red',   dataIndex: 'p95Red',   width: 80 }
+              ]
+            });
+
+            Ext.data.StoreManager.lookup('sections').load({
+              params: { beadChip: model.get('beadChip') } 
+            });
+
+            Ext.data.StoreManager.lookup('failedSections').load({
+              params: { beadChip: model.get('beadChip') }
+            });
+
+            Ext.data.StoreManager.lookup('passedSections').load({
+              params: { beadChip: model.get('beadChip') }
+            });
+
+            var tabPanel = Ext.create('Ext.tab.Panel', {
+              width: 600,
+              width: 1100,
+              items: [ sectionsGrid, passedSectionsGrid, failedSectionsGrid ]
+            });
+   
+            Ext.create('Ext.window.Window', {
+              height: 600,
+              width: 1100,
+              layout: 'fit', 
+              items: [ tabPanel ] 
+            }).show();
           });
 
           Ext.create('Ext.window.Window', {

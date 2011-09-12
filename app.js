@@ -1,6 +1,7 @@
 var fs      = require('fs');
 var sys     = require('sys');
 var async   = require('async');
+var url     = require('url');
 var express = require('express');
 
 var path    = '/mnt/iScanLogs';
@@ -95,8 +96,8 @@ app.get('/beadchips.read', function(req, res) {
       date:     item.sections[0].date, 
       beadChip: item.sections[0].beadChip,
       sections: item.sections.length,
-      pass:     0,
-      fail:     0
+      pass:     item.pass.length,
+      fail:     item.fail.length
     };
 
     docs.push(doc);
@@ -111,6 +112,66 @@ app.get('/beadchips.read', function(req, res) {
     };
 
     res.send(results);
+  });
+});
+
+app.get('/sections.read', function(req, res) {
+  var query = url.parse(req.url, true).query;
+
+  var beadChip_id = query.beadChip;
+
+  beadChips.forEach(function(beadChip) {
+    if(beadChip.sections[0].beadChip == beadChip_id) {
+      var results = {
+        success: true,
+        results: beadChip.sections.length,
+        items: beadChip.sections
+      };
+ 
+      res.send(results);
+
+      return;
+    } 
+  });
+});
+
+app.get('/failedSections.read', function(req, res) {
+  var query = url.parse(req.url, true).query;
+
+  var beadChip_id = query.beadChip;
+
+  beadChips.forEach(function(beadChip) {
+    if(beadChip.sections[0].beadChip == beadChip_id) {
+      var results = {
+        success: true,
+        results: beadChip.fail.length,
+        items: beadChip.fail
+      };
+ 
+      res.send(results);
+
+      return;
+    } 
+  });
+});
+
+app.get('/passedSections.read', function(req, res) {
+  var query = url.parse(req.url, true).query;
+
+  var beadChip_id = query.beadChip;
+
+  beadChips.forEach(function(beadChip) {
+    if(beadChip.sections[0].beadChip == beadChip_id) {
+      var results = {
+        success: true,
+        results: beadChip.pass.length,
+        items: beadChip.pass
+      };
+ 
+      res.send(results);
+
+      return;
+    } 
   });
 });
 
