@@ -1,3 +1,17 @@
-Adding express, removing commander
+## iScanMetricsWeb is two things:
 
-for reports, using extjs
+First, it is beadChip.js, which is a critical component of the command line version of this application.
+Second, it is ExpressJS wrapped around NodeJS
+
+
+#### Designed to accomplish (implemented features):
+  - Async file reading, parsing, and data population (see http://portalstack.blogspot.com for an article on it)
+  - Provide a simple beadChip grid which opens a multi-tab sections grid for all/fail/pass sections using ExtJS 4.0
+  - Use ExpressJS for featureful web server
+  - Use Jade for modern templating
+
+#### Capable of (not yet implemented):
+  - watching metrics log folder for changes
+  - populate new metrics when available
+  - automatically update client information without refresh
+

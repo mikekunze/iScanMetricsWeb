@@ -65,6 +65,15 @@ html
           var beadchipGrid = Ext.create('Ext.grid.GridPanel', {
             id: 'Ext.app.viewport.beadchipGrid',
             autoScroll: true,
+            tbar: [
+              {
+                text: 'View Sections',
+                handler: function() {
+                  var getLastModel = beadchipGrid.getSelectionModel().getLastSelected();
+                  processModel(getLastModel);
+                }
+              }
+            ],
             store: Ext.data.StoreManager.lookup('beadchips'),
             columns: [
               {
@@ -143,8 +152,7 @@ html
             }
           });
 
-          beadchipGrid.on('itemdblclick', function(view, model) {
-
+          var processModel = function(model) {
             // Sections GRID
             var sectionsGrid = Ext.create('Ext.grid.GridPanel', {
               title: 'Sections for ' + model.get('beadChip'),
@@ -229,6 +237,10 @@ html
               layout: 'fit', 
               items: [ tabPanel ] 
             }).show();
+          };
+
+          beadchipGrid.on('itemdblclick', function(view, model) {
+            processModel(model);
           });
 
           Ext.create('Ext.window.Window', {
