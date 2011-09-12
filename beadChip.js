@@ -4,11 +4,13 @@ var fs    = require('fs');
 var beadChip = function(file) {
   this.rows     = [];
   this.sections = [];
+  this.pass     = [];
+  this.fail     = [];
 
   this.init(file);
 };
 
-beadChip.prototype.buildBeadChip = function(rows, sections) {
+beadChip.prototype.buildBeadChip = function(rows, sections, pass, fail) {
 
   var parseSection = function(section, callback) {
 
@@ -33,6 +35,14 @@ beadChip.prototype.buildBeadChip = function(rows, sections) {
         p95Red:   Number(sectionArray[10])
       };
 
+      // Conditions for bad section
+      if(sectionObject.focusGrn < 0.5 || sectionObject.focusRed < 0.5 || 
+        sectionObject.p95Red < 10000 || sectionObject.p95Grn < 10000) {
+        fail.push(sectionObject);
+      } else {
+        pass.push(sectionObject);
+      }
+
       sections.push(sectionObject);
       callback();
     }
@@ -48,9 +58,11 @@ beadChip.prototype.buildBeadChip = function(rows, sections) {
 beadChip.prototype.init = function(file) {
 
   // Localize beadChip members
-  var build = this.buildBeadChip; 
-  var rows  = this.rows;
+  var build    = this.buildBeadChip; 
+  var rows     = this.rows;
   var sections = this.sections;
+  var pass     = this.pass;
+  var fail     = this.fail;
 
   var metricStream = fs.createReadStream(file, {
     flags: 'r',
@@ -81,7 +93,7 @@ beadChip.prototype.init = function(file) {
       async.forEach(allData.split('\n'), eachRow, function(err) {
         if(err) console.log(err);
 
-        build(rows, sections); 
+        build(rows, sections, pass, fail); 
       });
     });
   });
