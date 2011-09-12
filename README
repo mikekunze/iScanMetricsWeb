@@ -15,3 +15,5 @@ Second, it is ExpressJS wrapped around NodeJS
   - populate new metrics when available
   - automatically update client information without refresh
 
+#### installation
+  - npm install async express jade
