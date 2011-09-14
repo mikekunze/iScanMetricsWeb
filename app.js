@@ -7,6 +7,7 @@ var express = require('express');
 var path    = '/mnt/iScanLogs';
 
 var beadChip = require('./beadChip.js');
+var config   = require('./config.js');
 
 var metricsFiles = [];
 var beadChips    = [];
@@ -288,5 +289,5 @@ io.sockets.on('connection', function(socket) {
 });
 
 //  Start httpd process
-app.listen(3000);
+app.listen(config.port);
 console.log("extstack server listening on port %d in %s mode", app.address().port, app.settings.env);
