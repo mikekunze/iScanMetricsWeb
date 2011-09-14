@@ -9,6 +9,7 @@ Second, it is ExpressJS wrapped around NodeJS
   - Provide a simple beadChip grid which opens a multi-tab sections grid for all/fail/pass sections using ExtJS 4.0
   - Use ExpressJS for featureful web server
   - Use Jade for modern templating
+  - archiving of log files (in case source prunes)
 
 #### Capable of (not yet implemented):
   - watching metrics log folder for changes
