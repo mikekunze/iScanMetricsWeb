@@ -9,6 +9,11 @@ html
     script
       var socket = new io.connect('http://144.92.52.185');
       Ext.namespace('Ext.app.viewport');
+      Ext.namespace('Ext.app.security');
+      
+      socket.on('connection received', function(data) {
+        Ext.app.security.socket = data;
+      });
 
       Ext.define('section', {
         extend: 'Ext.data.Model',
