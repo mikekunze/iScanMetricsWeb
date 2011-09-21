@@ -19,7 +19,7 @@ html
         extend: 'Ext.data.Model',
         fields: [
           { name: 'beadChip', type: 'string' },
-          { name: 'date'    , type: 'string' },
+          { name: 'date'    , type: 'date' },
           { name: 'section' , type: 'string' },
           { name: 'focusGrn', type: 'number' },
           { name: 'regGrn',   type: 'number' },
@@ -36,7 +36,7 @@ html
       Ext.define('beadchip', {
         extend: 'Ext.data.Model',
         fields: [
-          { name: 'date',     type: 'string' },
+          { name: 'date',     type: 'date' },
           { name: 'beadChip', type: 'string' },
           { name: 'sections', type: 'number' },
           { name: 'pass',     type: 'number' },
@@ -74,6 +74,9 @@ html
               {
                 text: 'View Sections',
                 handler: function() {
+                  if(!beadchipGrid.getSelectionModel().getLastSelected())
+                    Ext.Msg.alert('Selection', 'Please select a beadChip first'); 
+
                   var getLastModel = beadchipGrid.getSelectionModel().getLastSelected();
                   processModel(getLastModel);
                 }
@@ -81,31 +84,11 @@ html
             ],
             store: Ext.data.StoreManager.lookup('beadchips'),
             columns: [
-              {
-                header: 'beadChip',
-                dataIndex: 'beadChip',
-                width: 135,
-              },
-              {
-                header: 'date',
-                dataIndex: 'date',
-                width: 200
-              },
-              {
-                header: 'fail',
-                dataIndex: 'fail',
-                width: 50
-              },
-              {
-                header: 'pass',
-                dataIndex: 'pass',
-                width: 50
-              },
-              {
-                header: 'sections',
-                dataIndex: 'sections',
-                width: 50
-              }
+              { header: 'beadChip',     dataIndex: 'beadChip', width: 135 },
+              { header: 'date started', dataIndex: 'date',     width: 200 },
+              { header: 'fail',         dataIndex: 'fail',     width: 50  },
+              { header: 'pass',         dataIndex: 'pass',     width: 50  },
+              { header: 'sections',     dataIndex: 'sections', width: 50  }
             ]
           });
 
